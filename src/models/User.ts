@@ -1,5 +1,6 @@
 import { DataTypes, Model, type Optional } from 'sequelize';
 import sequelize from '../config/database.js';
+import bcrypt from 'bcrypt';
 
 // Define attributes
 interface UserAttributes {
@@ -15,12 +16,12 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
-  public email!: string;
-  public password_hash!: string;
-  public first_name!: string;
-  public last_name!: string;
-  public role!: 'user' | 'admin';
+  declare id: string;
+  declare email: string;
+  declare password_hash: string;
+  declare first_name: string;
+  declare last_name: string;
+  declare role: 'user' | 'admin';
 }
 
 User.init(
@@ -58,6 +59,24 @@ User.init(
   {
     sequelize,
     tableName: 'users',
+    hooks: {
+    beforeCreate: async (user: User) => {
+      const password = user.getDataValue('password_hash');
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        user.setDataValue('password_hash', await bcrypt.hash(password, salt));
+      }
+    },
+    beforeUpdate: async (user: User) => {
+      if (user.changed('password_hash')) {
+        const password = user.getDataValue('password_hash');
+        if (password) {
+          const salt = await bcrypt.genSalt(10);
+          user.setDataValue('password_hash', await bcrypt.hash(password, salt));
+        }
+      }
+    }
+  }
   }
 );
 
