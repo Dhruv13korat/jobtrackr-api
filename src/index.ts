@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import sequelize from './config/database.js';
 import './models/User.js'; 
 import authRoutes from './routes/authRoutes.js';
+import './models/jobApplication.js';
 
 dotenv.config();
 

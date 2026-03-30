@@ -39,6 +39,8 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
+    "request": "^2.88.2",
+    "response": "^0.18.0",
     "sequelize": "^6.37.8"
   }
 }
