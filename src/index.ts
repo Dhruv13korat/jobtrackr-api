@@ -5,6 +5,7 @@ import sequelize from './config/database.js';
 import './models/User.js'; 
 import authRoutes from './routes/authRoutes.js';
 import './models/jobApplication.js';
+import jobRoutes from './routes/jobRoutes.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobRoutes);
 
 const startServer = async () => {
   try {
